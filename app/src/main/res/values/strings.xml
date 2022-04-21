@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CurrencyApplication</string>
+
+
+    <string-array name="planets_array">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>EGP</item>
+    </string-array>
+
+</resources>
