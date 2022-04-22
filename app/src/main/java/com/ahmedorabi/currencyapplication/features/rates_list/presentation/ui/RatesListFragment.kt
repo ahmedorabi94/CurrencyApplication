@@ -71,14 +71,8 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Timber.e(s.toString())
                 if (s.toString().isNotEmpty()) {
 
-                    val fromValue = s.toString()
-
-                    val fromInEuro = viewModel.convertToEuro(fromValue.toDouble(),viewModel.from.value)
-                    val toInEuro = viewModel.convertToEuro(fromValue.toDouble(),viewModel.to.value)
-
-                    val result = viewModel.getExchangeRate(fromValue.toDouble(),toInEuro,fromInEuro)
-
-                    binding.rateEdTo.setText(result.toString())
+                    viewModel.fromValue = s.toString()
+                    makeConversion()
                 } else {
                     binding.rateEdTo.setText("0")
                     //  binding.planetsEd.setText("0")
@@ -88,46 +82,54 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         })
 
-//        binding.rateEdTo.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
-//                Unit
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-//
-//            override fun afterTextChanged(s: Editable?) {
-//
-//                Timber.e(s.toString())
-//                if (s.toString().isNotEmpty()) {
+        binding.rateEdTo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+            override fun afterTextChanged(s: Editable?) {
+
+                Timber.e(s.toString())
+                if (s.toString().isNotEmpty()) {
 //                    val toValue = s.toString()
 //                    val result = toValue.toDouble() * viewModel.from.value
 //
 //                    binding.rateEdFrom.setText(result.toString())
-//                } else {
-//                    binding.rateEdFrom.setText("0")
-//                    //  binding.planetsEd.setText("0")
-//                }
-//
-//            }
-//
-//        })
+                    viewModel.toValue = s.toString()
+                } else {
+                    //binding.rateEdFrom.setText("0")
+                    //  binding.planetsEd.setText("0")
+                }
+
+            }
+
+        })
 
 
         binding.swapBtn.setOnClickListener {
             if (!viewModel.isSwap) {
                 Timber.e("true")
                 binding.ratesSpinnerFrom.setSelection(viewModel.toPosition)
-                binding.rateEdFrom.setText(viewModel.to.value.toString())
+                binding.rateEdFrom.setText(viewModel.toValue)
                 binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
-                binding.rateEdTo.setText(viewModel.from.value.toString())
+                binding.rateEdTo.setText(viewModel.fromValue)
                // viewModel.isSwap = true
             } else {
                 Timber.e("false")
                 binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
-                binding.rateEdTo.setText(viewModel.from.value.toString())
+                binding.rateEdTo.setText(viewModel.from.rateValue.toString())
                 viewModel.isSwap = false
             }
         }
 
+    }
+
+    private fun makeConversion(){
+        if (viewModel.fromValue.isNotEmpty()){
+            val result = viewModel.getExchangeRate(viewModel.fromValue.toDouble())
+            binding.rateEdTo.setText(String.format("%.4f", result))
+        }
     }
 
 
@@ -161,7 +163,7 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val rateModelList = ArrayList<RateModel>()
         ratesResponse.rates.forEach {
             if (it.key == "AED" || it.key == "EUR" || it.key == "EGP"  || it.key == "USD" ){
-                rateModelList.add(RateModel(it.key, it.value))
+                rateModelList.add(RateModel(name = it.key, rateValue = it.value))
 
             }
         }
@@ -202,12 +204,14 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val from = parent.selectedItem as RateModel
                 viewModel.from = from
                 viewModel.fromPosition = position
+                makeConversion()
             }
 
             R.id.rates_spinner_to -> {
                 val to = parent.selectedItem as RateModel
                 viewModel.to = to
                 viewModel.toPosition = position
+                makeConversion()
             }
         }
 

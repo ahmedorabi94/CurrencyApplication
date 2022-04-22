@@ -23,14 +23,15 @@ class RatesListViewModel @Inject constructor(
     val ratesResponse: LiveData<Resource<RatesResponse>>
         get() = _ratesResponse
 
-    var from: RateModel = RateModel("", 0.0)
-    var to: RateModel = RateModel("", 0.0)
+    var from: RateModel = RateModel(name = "", rateValue= 0.0)
+    var to: RateModel = RateModel(name = "", rateValue= 0.0)
 
-    val base = RateModel("Eur",20.0)
 
     var isSwap = false
     var fromPosition = 0
     var toPosition = 0
+    var fromValue = ""
+    var toValue = ""
 
 
     init {
@@ -54,8 +55,8 @@ class RatesListViewModel @Inject constructor(
         return amount / euro
     }
 
-    fun getExchangeRate(amount : Double,fromRate : Double , toRate : Double) : Double{
-        return (amount * to.value) / from.value
+    fun getExchangeRate(amount : Double) : Double{
+        return (amount * to.rateValue) / from.rateValue
     }
 
 }
