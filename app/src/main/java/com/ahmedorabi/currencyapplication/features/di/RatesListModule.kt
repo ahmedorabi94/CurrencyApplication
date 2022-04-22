@@ -1,7 +1,7 @@
 package com.ahmedorabi.currencyapplication.features.di
 
 import com.ahmedorabi.currencyapplication.core.data.api.ApiService
-import com.ahmedorabi.currencyapplication.core.db.RateDao
+import com.ahmedorabi.currencyapplication.core.db.CurrencyDao
 import com.ahmedorabi.currencyapplication.core.domain.usecases.AddRateUseCase
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesLocalUseCase
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesUseCase
@@ -44,7 +44,7 @@ object RatesListModule {
 
     @Singleton
     @Provides
-    fun provideInRoomLocalDataSource(rateDao: RateDao): RoomDataSource {
+    fun provideInRoomLocalDataSource(rateDao: CurrencyDao): RoomDataSource {
         return InRoomLocalDataSourceAddRate(rateDao)
     }
 

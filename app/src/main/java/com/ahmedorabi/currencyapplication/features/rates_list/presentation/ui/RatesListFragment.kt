@@ -73,7 +73,10 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                     viewModel.fromValue = s.toString()
                     makeConversion()
+                    viewModel.addRate()
                 } else {
+                    viewModel.fromValue = ""
+                    viewModel.toValue = ""
                     binding.rateEdTo.setText("0")
                     //  binding.planetsEd.setText("0")
                 }
