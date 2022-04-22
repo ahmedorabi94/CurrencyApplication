@@ -9,19 +9,16 @@ import com.ahmedorabi.currencyapplication.core.domain.model.CurrencyDbModel
 import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
 import com.ahmedorabi.currencyapplication.core.domain.model.RatesResponse
 import com.ahmedorabi.currencyapplication.core.domain.usecases.AddRateUseCase
-import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesLocalUseCase
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
     private val useCase: GetRatesUseCase,
-    private val addRateUseCase: AddRateUseCase,
-    private val getRatesLocalUseCase: GetRatesLocalUseCase
+    private val addRateUseCase: AddRateUseCase
 ) :
     ViewModel() {
 
@@ -41,12 +38,12 @@ class RatesListViewModel @Inject constructor(
 
 
     init {
-        getRatesResponseFlow()
+         getRatesResponseFlow()
     }
 
 
-     fun addRate() {
-        val currencyDbModel =   CurrencyDbModel(
+    fun addRate() {
+        val currencyDbModel = CurrencyDbModel(
             fromName = from.name,
             ToName = to.name,
             fromValue = fromValue.toDouble(),
@@ -54,10 +51,6 @@ class RatesListViewModel @Inject constructor(
         )
         viewModelScope.launch {
             addRateUseCase.invoke(currencyDbModel)
-           getRatesLocalUseCase.invoke().collect{rates->
-                Timber.e(rates.toString())
-            }
-
         }
     }
 

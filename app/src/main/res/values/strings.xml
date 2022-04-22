@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">CurrencyApplication</string>
     <string name="details">Details</string>
+    <string name="from">From</string>
+    <string name="value">Value</string>
+    <string name="to">To</string>
 
 
     <string-array name="planets_array">
