@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahmedorabi.currencyapplication.core.data.api.Resource
+import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
 import com.ahmedorabi.currencyapplication.core.domain.model.RatesResponse
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +23,18 @@ class RatesListViewModel @Inject constructor(
     val ratesResponse: LiveData<Resource<RatesResponse>>
         get() = _ratesResponse
 
+    var from: RateModel = RateModel("", 0.0)
+    var to: RateModel = RateModel("", 0.0)
+
+    val base = RateModel("Eur",20.0)
+
+    var isSwap = false
+    var fromPosition = 0
+    var toPosition = 0
+
 
     init {
-       getRatesResponseFlow()
+        getRatesResponseFlow()
     }
 
     private fun getRatesResponseFlow() {
@@ -34,9 +44,18 @@ class RatesListViewModel @Inject constructor(
 
                     _ratesResponse.value = response
 
+
                 }
         }
 
+    }
+
+    fun convertToEuro(amount : Double,euro : Double): Double{
+        return amount / euro
+    }
+
+    fun getExchangeRate(amount : Double,fromRate : Double , toRate : Double) : Double{
+        return (amount * to.value) / from.value
     }
 
 }

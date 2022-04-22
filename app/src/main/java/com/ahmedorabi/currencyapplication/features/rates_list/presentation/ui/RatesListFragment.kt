@@ -12,8 +12,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.ahmedorabi.currencyapplication.R
 import com.ahmedorabi.currencyapplication.core.data.api.Resource
+import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
+import com.ahmedorabi.currencyapplication.core.domain.model.RatesResponse
 import com.ahmedorabi.currencyapplication.databinding.FragmentRatesListBinding
 import com.ahmedorabi.currencyapplication.features.rates_list.presentation.viewmodel.RatesListViewModel
 import com.ahmedorabi.currencyapplication.features.utils.EspressoIdlingResource
@@ -42,32 +45,88 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         observeViewModel()
+        initUI()
+        observeViewModel()
+    }
 
-        binding.planetsSpinner.onItemSelectedListener = this
-        binding.planetsSpinnerTwo.onItemSelectedListener = this
+    private fun initUI() {
+        binding.detailsBtn.setOnClickListener {
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_ratesListFragment_to_rateDetailsFragment)
+        }
 
-        binding.planetsEd.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+        binding.ratesSpinnerFrom.onItemSelectedListener = this
+        binding.ratesSpinnerTo.onItemSelectedListener = this
+
+
+
+        binding.rateEdFrom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
             override fun afterTextChanged(s: Editable?) {
 
                 Timber.e(s.toString())
-                if (s.toString().isNotEmpty()){
-                    val fromValue = s.toString()
-                    val result = fromValue.toInt() * 20
+                if (s.toString().isNotEmpty()) {
 
-                    binding.planetsEdTwo.setText(result.toString())
-                }else{
-                    binding.planetsEdTwo.setText("0")
-                  //  binding.planetsEd.setText("0")
+                    val fromValue = s.toString()
+
+                    val fromInEuro = viewModel.convertToEuro(fromValue.toDouble(),viewModel.from.value)
+                    val toInEuro = viewModel.convertToEuro(fromValue.toDouble(),viewModel.to.value)
+
+                    val result = viewModel.getExchangeRate(fromValue.toDouble(),toInEuro,fromInEuro)
+
+                    binding.rateEdTo.setText(result.toString())
+                } else {
+                    binding.rateEdTo.setText("0")
+                    //  binding.planetsEd.setText("0")
                 }
 
             }
 
         })
+
+//        binding.rateEdTo.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+//                Unit
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+//
+//            override fun afterTextChanged(s: Editable?) {
+//
+//                Timber.e(s.toString())
+//                if (s.toString().isNotEmpty()) {
+//                    val toValue = s.toString()
+//                    val result = toValue.toDouble() * viewModel.from.value
+//
+//                    binding.rateEdFrom.setText(result.toString())
+//                } else {
+//                    binding.rateEdFrom.setText("0")
+//                    //  binding.planetsEd.setText("0")
+//                }
+//
+//            }
+//
+//        })
+
+
+        binding.swapBtn.setOnClickListener {
+            if (!viewModel.isSwap) {
+                Timber.e("true")
+                binding.ratesSpinnerFrom.setSelection(viewModel.toPosition)
+                binding.rateEdFrom.setText(viewModel.to.value.toString())
+                binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
+                binding.rateEdTo.setText(viewModel.from.value.toString())
+               // viewModel.isSwap = true
+            } else {
+                Timber.e("false")
+                binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
+                binding.rateEdTo.setText(viewModel.from.value.toString())
+                viewModel.isSwap = false
+            }
+        }
 
     }
 
@@ -78,28 +137,14 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
             viewModel.ratesResponse.observe(viewLifecycleOwner) { userState ->
 
                 when (userState.status) {
-
                     Resource.Status.LOADING -> {
                         showLoading()
                     }
                     Resource.Status.SUCCESS -> {
                         hideLoading()
-
                         Timber.e(userState.data.toString())
+                        setAdapters(userState.data!!)
 
-                        val keys = userState.data?.rates?.keys
-                        val values = userState.data?.rates?.values
-                        Timber.e(values.toString())
-
-                        val userAdapter: ArrayAdapter<String> =
-                            ArrayAdapter(requireContext(),  android.R.layout.simple_spinner_item, keys!!.toList())
-
-                        userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-                        binding.planetsSpinner.adapter = userAdapter
-                        binding.planetsSpinnerTwo.adapter = userAdapter
-
-                        EspressoIdlingResource.decrement()
                     }
                     Resource.Status.ERROR -> {
                         hideLoading()
@@ -110,6 +155,30 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
 
+    }
+
+    private fun setAdapters(ratesResponse: RatesResponse) {
+        val rateModelList = ArrayList<RateModel>()
+        ratesResponse.rates.forEach {
+            if (it.key == "AED" || it.key == "EUR" || it.key == "EGP"  || it.key == "USD" ){
+                rateModelList.add(RateModel(it.key, it.value))
+
+            }
+        }
+
+        val rateAdapter: ArrayAdapter<RateModel> =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                rateModelList
+            )
+
+        rateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.ratesSpinnerFrom.adapter = rateAdapter
+        binding.ratesSpinnerTo.adapter = rateAdapter
+
+        EspressoIdlingResource.decrement()
     }
 
 
@@ -128,24 +197,19 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Timber.e(position.toString())
-        var from = "EUR"
-        var to = "EUR"
         when (parent?.id) {
-            R.id.planets_spinner -> {
-                from = parent.selectedItem.toString()
-
+            R.id.rates_spinner_from -> {
+                val from = parent.selectedItem as RateModel
+                viewModel.from = from
+                viewModel.fromPosition = position
             }
 
-            R.id.planets_spinner_Two -> {
-                to = parent.selectedItem.toString()
-
+            R.id.rates_spinner_to -> {
+                val to = parent.selectedItem as RateModel
+                viewModel.to = to
+                viewModel.toPosition = position
             }
         }
-        Timber.e("From $from")
-        Timber.e("To $to")
-
-
-
 
     }
 
