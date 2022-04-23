@@ -16,4 +16,7 @@ interface CurrencyDao {
     @Query("Select * from currency")
     fun getAllRates(): List<CurrencyDbModel>
 
+
+//    @Query("Select * from currency where created_at >= DATEADD(day,-7, GETDATE())")
+//    fun getAllRatesTest(): List<CurrencyDbModel>
 }

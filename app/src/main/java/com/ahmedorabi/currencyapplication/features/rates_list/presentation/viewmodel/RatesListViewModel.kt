@@ -38,7 +38,7 @@ class RatesListViewModel @Inject constructor(
 
 
     init {
-         getRatesResponseFlow()
+        // getRatesResponseFlow()
     }
 
 
@@ -47,7 +47,8 @@ class RatesListViewModel @Inject constructor(
             fromName = from.name,
             ToName = to.name,
             fromValue = fromValue.toDouble(),
-            ToValue = toValue.toDouble()
+            ToValue = toValue.toDouble(),
+            createdAt = System.currentTimeMillis()
         )
         viewModelScope.launch {
             addRateUseCase.invoke(currencyDbModel)
