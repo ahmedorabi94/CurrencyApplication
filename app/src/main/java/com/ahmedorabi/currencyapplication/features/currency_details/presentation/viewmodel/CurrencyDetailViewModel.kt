@@ -24,9 +24,13 @@ class CurrencyDetailViewModel @Inject constructor(
 
 
     init {
+       getRates()
+    }
+
+      fun getRates(){
         viewModelScope.launch {
             getRatesLocalUseCase.invoke().collect { rates ->
-                Timber.e(rates.toString())
+                //  Timber.e(rates.toString())
                 _ratesResponse.value = rates
             }
 
