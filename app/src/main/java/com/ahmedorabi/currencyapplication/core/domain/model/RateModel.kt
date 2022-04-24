@@ -12,4 +12,10 @@ data class RateModel(
     override fun toString(): String {
         return name
     }
+
+     fun getPopularCurrency(): String {
+        return name + "\n"
+    }
+
+
 }

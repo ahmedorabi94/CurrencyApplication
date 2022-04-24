@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.util.*
 import javax.inject.Inject
 
 class InRoomLocalDataSourceAddRate @Inject constructor(private val rateDao: CurrencyDao) :
@@ -18,8 +19,13 @@ class InRoomLocalDataSourceAddRate @Inject constructor(private val rateDao: Curr
     }
 
     override suspend fun getRates(): Flow<List<CurrencyDbModel>> {
+        val currentDate = Date(System.currentTimeMillis())
+        val date = Calendar.getInstance()
+        date.add(Calendar.DATE, -3)
+        val dateFromThreeDats = date.time
+
         return flow {
-            emit(rateDao.getAllRates())
+            emit(rateDao.getAllRatesTest(currentDate, dateFromThreeDats))
         }.flowOn(IO)
     }
 }

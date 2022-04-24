@@ -12,7 +12,9 @@ import com.ahmedorabi.currencyapplication.core.domain.usecases.AddRateUseCase
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @HiltViewModel
@@ -36,6 +38,10 @@ class RatesListViewModel @Inject constructor(
     var fromValue = ""
     var toValue = ""
 
+    var isFromChanged = false
+    var isToChanged = false
+
+    val rateModelList = ArrayList<RateModel>()
 
     init {
         // getRatesResponseFlow()
@@ -48,7 +54,7 @@ class RatesListViewModel @Inject constructor(
             ToName = to.name,
             fromValue = fromValue.toDouble(),
             ToValue = toValue.toDouble(),
-            createdAt = System.currentTimeMillis()
+            createdAt = Date(System.currentTimeMillis())
         )
         viewModelScope.launch {
             addRateUseCase.invoke(currencyDbModel)
@@ -68,6 +74,14 @@ class RatesListViewModel @Inject constructor(
 
     fun getExchangeRate(amount: Double): Double {
         return (amount * to.rateValue) / from.rateValue
+    }
+    fun getPopularList(map : Map<String,Double>){
+        map.forEach {
+            if (it.key == "AED" || it.key == "EUR" || it.key == "EGP"  || it.key == "USD" ){
+                rateModelList.add(RateModel(name = it.key, rateValue = it.value))
+
+            }
+        }
     }
 
 }

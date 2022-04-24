@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
 import com.ahmedorabi.currencyapplication.databinding.FragmentCurrencyDetailsBinding
 import com.ahmedorabi.currencyapplication.features.currency_details.presentation.adapter.CurrencyAdapter
 import com.ahmedorabi.currencyapplication.features.currency_details.presentation.viewmodel.CurrencyDetailViewModel
@@ -20,6 +21,17 @@ class CurrencyDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: CurrencyDetailViewModel by viewModels()
 
+    private val pupularList = ArrayList<RateModel>()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            val x = it.getParcelableArrayList<RateModel>("PopularCurrencies")
+            pupularList.addAll(x!!)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +43,8 @@ class CurrencyDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.textView.text = pupularList.toString()
 
         viewModel.ratesResponse.observe(viewLifecycleOwner) {
             it?.let { currencies ->

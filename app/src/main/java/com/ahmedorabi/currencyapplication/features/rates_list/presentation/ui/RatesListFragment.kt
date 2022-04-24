@@ -51,8 +51,11 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun initUI() {
         binding.detailsBtn.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelableArrayList("PopularCurrencies",viewModel.rateModelList)
+
             Navigation.findNavController(binding.root)
-                .navigate(R.id.action_ratesListFragment_to_rateDetailsFragment)
+                .navigate(R.id.action_ratesListFragment_to_rateDetailsFragment,bundle)
         }
 
         binding.ratesSpinnerFrom.onItemSelectedListener = this
@@ -111,19 +114,23 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
         binding.swapBtn.setOnClickListener {
-            if (!viewModel.isSwap) {
-                Timber.e("true")
-                binding.ratesSpinnerFrom.setSelection(viewModel.toPosition)
-                binding.rateEdFrom.setText(viewModel.toValue)
-                binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
-                binding.rateEdTo.setText(viewModel.fromValue)
-               // viewModel.isSwap = true
-            } else {
-                Timber.e("false")
-                binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
-                binding.rateEdTo.setText(viewModel.from.rateValue.toString())
-                viewModel.isSwap = false
-            }
+
+            binding.ratesSpinnerFrom.setSelection(viewModel.toPosition)
+            binding.rateEdFrom.setText(viewModel.toValue)
+            binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
+            binding.rateEdTo.setText(viewModel.fromValue)
+
+
+//            if (!viewModel.isSwap) {
+//                Timber.e("true")
+//
+//               // viewModel.isSwap = true
+//            } else {
+//                Timber.e("false")
+//                binding.ratesSpinnerTo.setSelection(viewModel.fromPosition)
+//                binding.rateEdTo.setText(viewModel.from.rateValue.toString())
+//                viewModel.isSwap = false
+//            }
         }
 
     }
@@ -148,7 +155,8 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     Resource.Status.SUCCESS -> {
                         hideLoading()
                         Timber.e(userState.data.toString())
-                        setAdapters(userState.data!!)
+                        viewModel.getPopularList(userState.data!!.rates)
+                        setAdapters(userState.data)
 
                     }
                     Resource.Status.ERROR -> {
@@ -182,6 +190,9 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         binding.ratesSpinnerFrom.adapter = rateAdapter
         binding.ratesSpinnerTo.adapter = rateAdapter
+
+
+        binding.rateEdFrom.setText("1")
 
         EspressoIdlingResource.decrement()
     }
