@@ -12,6 +12,7 @@ import com.ahmedorabi.currencyapplication.features.currency_details.presentation
 import com.ahmedorabi.currencyapplication.features.currency_details.presentation.viewmodel.CurrencyDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.lang.StringBuilder
 
 
 @AndroidEntryPoint
@@ -44,7 +45,12 @@ class CurrencyDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.textView.text = pupularList.toString()
+        val sb = StringBuilder()
+        pupularList.forEach {
+            sb.append("" + it.name + "  :  " + it.rateValue)
+            sb.append("\n")
+        }
+        binding.textView.text = sb.toString()
 
         viewModel.ratesResponse.observe(viewLifecycleOwner) {
             it?.let { currencies ->

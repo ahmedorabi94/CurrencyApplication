@@ -16,6 +16,8 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
+import java.util.*
+import kotlin.collections.ArrayList
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -47,7 +49,7 @@ class CurrencyDetailViewModelTest {
     @Test
     fun shouldGetRatesListSuccessResponse() {
         val CurrencyDbModel = CurrencyDbModel(
-            createdAt = 0,
+            createdAt = Date(),
             currencyId = 1,
             fromName = "",
             fromValue = 0.0,

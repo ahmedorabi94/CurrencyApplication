@@ -30,34 +30,46 @@ class RatesListViewModel @Inject constructor(
     var from: RateModel = RateModel(name = "", rateValue = 0.0)
     var to: RateModel = RateModel(name = "", rateValue = 0.0)
 
-
-    var isSwap = false
     var fromPosition = 0
     var toPosition = 0
     var fromValue = ""
     var toValue = ""
 
-    var isFromChanged = false
-    var isToChanged = false
+//    var isFromChanged = false
+//    var isToChanged = false
 
-    val rateModelList = ArrayList<RateModel>()
+    val popularList = ArrayList<RateModel>()
+//    val to1 = RateModel(name = "AED", rateValue = 4.0)
+//    val to2 = RateModel(name = "EGP", rateValue = 20.0)
+//    val to3 = RateModel(name = "EUR", rateValue = 1.0)
+//    val to4 = RateModel(name = "USD", rateValue = 2.0)
+    var isGoToNextScreen = false
+
 
     init {
-        // getRatesResponseFlow()
+//        popularList.add(to1)
+//        popularList.add(to2)
+//        popularList.add(to3)
+//        popularList.add(to4)
+
+        getRatesResponseFlow()
     }
 
 
     fun addRate() {
-        val currencyDbModel = CurrencyDbModel(
-            fromName = from.name,
-            ToName = to.name,
-            fromValue = fromValue.toDouble(),
-            ToValue = toValue.toDouble(),
-            createdAt = Date(System.currentTimeMillis())
-        )
-        viewModelScope.launch {
-            addRateUseCase.invoke(currencyDbModel)
+        if (fromValue.isNotEmpty() && toValue.isNotEmpty()){
+            val currencyDbModel = CurrencyDbModel(
+                fromName = from.name,
+                ToName = to.name,
+                fromValue = fromValue.toDouble(),
+                ToValue = toValue.toDouble(),
+                createdAt = Date()
+            )
+            viewModelScope.launch {
+                addRateUseCase.invoke(currencyDbModel)
+            }
         }
+
     }
 
     private fun getRatesResponseFlow() {
@@ -81,7 +93,7 @@ class RatesListViewModel @Inject constructor(
                 || it.key == "USD" || it.key == "GBP" || it.key == "AUD"
                 || it.key == "CHF" || it.key == "CNY" || it.key == "HKD" || it.key == "NZD"
             ) {
-                rateModelList.add(RateModel(name = it.key, rateValue = it.value))
+                popularList.add(RateModel(name = it.key, rateValue = it.value))
 
             }
         }

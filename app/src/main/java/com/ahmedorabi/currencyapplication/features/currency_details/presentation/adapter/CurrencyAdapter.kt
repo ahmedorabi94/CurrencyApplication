@@ -44,9 +44,7 @@ class CurrencyAdapter :
 
         fun bind(item: CurrencyDbModel) {
             binding.currencyFromName.text = item.fromName
-            binding.currencyFromValue.text = "${item.fromValue}"
             binding.currencyToName.text = item.ToName
-            binding.currencyToValue.text = "${item.ToValue}"
         }
 
     }

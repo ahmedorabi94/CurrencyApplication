@@ -25,7 +25,7 @@ class InRoomLocalDataSourceAddRate @Inject constructor(private val rateDao: Curr
         val dateFromThreeDats = date.time
 
         return flow {
-            emit(rateDao.getAllRatesTest(currentDate, dateFromThreeDats))
+            emit(rateDao.getAllRates(currentDate, dateFromThreeDats))
         }.flowOn(IO)
     }
 }

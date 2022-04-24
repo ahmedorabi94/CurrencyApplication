@@ -4,6 +4,7 @@
     <string name="from">From</string>
     <string name="value">Value</string>
     <string name="to">To</string>
+    <string name="other_popular_currencies">Other Popular Currencies</string>
 
 
     <string-array name="planets_array">
