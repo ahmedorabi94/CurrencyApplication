@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -20,9 +21,12 @@ class InRoomLocalDataSourceAddRate @Inject constructor(private val rateDao: Curr
 
     override suspend fun getRates(): Flow<List<CurrencyDbModel>> {
         val currentDate = Date(System.currentTimeMillis())
+        Timber.e(currentDate.toString())
+
         val date = Calendar.getInstance()
         date.add(Calendar.DATE, -3)
         val dateFromThreeDats = date.time
+        Timber.e(dateFromThreeDats.toString())
 
         return flow {
             emit(rateDao.getAllRates(currentDate, dateFromThreeDats))

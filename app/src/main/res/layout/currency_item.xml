@@ -38,7 +38,19 @@
             android:maxLines="1"
             android:text="EUR"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/currencyFromValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="12sp" />
 
 
         <TextView
@@ -52,7 +64,21 @@
             android:maxLines="1"
             android:text="EGP"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/currencyToValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:maxLines="1"
+            android:text="20"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+
+
 
     </LinearLayout>
 

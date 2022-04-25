@@ -32,30 +32,18 @@ class RatesListViewModel @Inject constructor(
 
     var fromPosition = 0
     var toPosition = 0
-    var fromValue = ""
-    var toValue = ""
-
-//    var isFromChanged = false
-//    var isToChanged = false
+    var fromValue = "1"
+    var toValue = "1"
 
     val popularList = ArrayList<RateModel>()
-//    val to1 = RateModel(name = "AED", rateValue = 4.0)
-//    val to2 = RateModel(name = "EGP", rateValue = 20.0)
-//    val to3 = RateModel(name = "EUR", rateValue = 1.0)
-//    val to4 = RateModel(name = "USD", rateValue = 2.0)
     var isGoToNextScreen = false
 
 
     init {
-//        popularList.add(to1)
-//        popularList.add(to2)
-//        popularList.add(to3)
-//        popularList.add(to4)
-
         getRatesResponseFlow()
     }
 
-     fun getRatesResponseFlow() {
+    private fun getRatesResponseFlow() {
         viewModelScope.launch {
             useCase.invoke()
                 .collect { response ->
@@ -67,7 +55,7 @@ class RatesListViewModel @Inject constructor(
 
 
     fun addRate() {
-        if (fromValue.isNotEmpty() && toValue.isNotEmpty()){
+        if (fromValue.isNotEmpty() && toValue.isNotEmpty()) {
             val currencyDbModel = CurrencyDbModel(
                 fromName = from.name,
                 ToName = to.name,
@@ -83,11 +71,10 @@ class RatesListViewModel @Inject constructor(
     }
 
 
-
-
     fun getExchangeRate(amount: Double): Double {
         return (amount * to.rateValue) / from.rateValue
     }
+
 
     fun getPopularList(map: Map<String, Double>) {
         map.forEach {

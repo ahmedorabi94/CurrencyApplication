@@ -21,7 +21,6 @@ import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
 import com.ahmedorabi.currencyapplication.core.domain.model.RatesResponse
 import com.ahmedorabi.currencyapplication.databinding.FragmentRatesListBinding
 import com.ahmedorabi.currencyapplication.features.rates_list.presentation.viewmodel.RatesListViewModel
-import com.ahmedorabi.currencyapplication.features.utils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -49,7 +48,6 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
         super.onViewCreated(view, savedInstanceState)
         initUI()
         observeViewModel()
-        //  setAdapters()
     }
 
     private fun initUI() {
@@ -98,6 +96,7 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
                         binding.rateEdFrom.setText("0")
                     }
 
+
                 }
 
 
@@ -115,7 +114,6 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
 
                 s?.let {
                     Timber.e("rateEdTo%s", s.toString())
-
                     Timber.e(s.toString())
                     if (s.toString().isNotEmpty() && s.toString() != "NaN") {
                         viewModel.toValue = s.toString()
@@ -182,21 +180,9 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
     private fun setAdapters(ratesResponse: RatesResponse? = null) {
         val rateModelList = ArrayList<RateModel>()
         ratesResponse!!.rates.forEach {
-            // if (it.key == "AED" || it.key == "EUR" || it.key == "EGP"  || it.key == "USD" ){
             rateModelList.add(RateModel(name = it.key, rateValue = it.value))
 
-            // }
         }
-        val to1 = RateModel(name = "AED", rateValue = 4.0)
-        val to2 = RateModel(name = "EGP", rateValue = 20.0)
-        val to3 = RateModel(name = "EUR", rateValue = 1.0)
-        val to4 = RateModel(name = "USD", rateValue = 2.0)
-
-
-        rateModelList.add(to1)
-        rateModelList.add(to2)
-        rateModelList.add(to3)
-        rateModelList.add(to4)
 
         val rateAdapter: ArrayAdapter<RateModel> =
             ArrayAdapter(
@@ -210,10 +196,11 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
         binding.ratesSpinnerFrom.adapter = rateAdapter
         binding.ratesSpinnerTo.adapter = rateAdapter
 
+        binding.ratesSpinnerFrom.setSelection(viewModel.fromPosition)
+        binding.ratesSpinnerTo.setSelection(viewModel.toPosition)
 
-        binding.rateEdFrom.setText("1")
+        binding.rateEdFrom.setText(viewModel.fromValue)
 
-        EspressoIdlingResource.decrement()
     }
 
 
