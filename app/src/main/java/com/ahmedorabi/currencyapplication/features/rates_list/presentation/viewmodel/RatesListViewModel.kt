@@ -55,6 +55,16 @@ class RatesListViewModel @Inject constructor(
         getRatesResponseFlow()
     }
 
+     fun getRatesResponseFlow() {
+        viewModelScope.launch {
+            useCase.invoke()
+                .collect { response ->
+                    _ratesResponse.value = response
+                }
+        }
+
+    }
+
 
     fun addRate() {
         if (fromValue.isNotEmpty() && toValue.isNotEmpty()){
@@ -72,15 +82,7 @@ class RatesListViewModel @Inject constructor(
 
     }
 
-    private fun getRatesResponseFlow() {
-        viewModelScope.launch {
-            useCase.invoke()
-                .collect { response ->
-                    _ratesResponse.value = response
-                }
-        }
 
-    }
 
 
     fun getExchangeRate(amount: Double): Double {

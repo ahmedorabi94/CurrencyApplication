@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.ahmedorabi.currencyapplication.TestCoroutineRule
 import com.ahmedorabi.currencyapplication.core.domain.model.CurrencyDbModel
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesLocalUseCase
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
@@ -42,7 +43,7 @@ class CurrencyDetailViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = CurrencyDetailViewModel(useCase)
+      //  viewModel = CurrencyDetailViewModel(useCase)
     }
 
 
@@ -69,14 +70,15 @@ class CurrencyDetailViewModelTest {
                 .`when`(useCase)
                 .invoke()
 
+            viewModel = CurrencyDetailViewModel(useCase)
+
             viewModel.ratesResponse.observeForever(apiRatesObserver)
-            viewModel.getRates()
 
             verify(apiRatesObserver).onChanged(list)
 
             viewModel.ratesResponse.removeObserver(apiRatesObserver)
 
-            // assertEquals(viewModel.ratesResponse.value, list)
+            assertEquals(viewModel.ratesResponse.value, list)
         }
 
 
