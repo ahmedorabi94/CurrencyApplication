@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmedorabi.currencyapplication.core.domain.model.CurrencyDbModel
 import com.ahmedorabi.currencyapplication.databinding.CurrencyItemBinding
+import com.ahmedorabi.currencyapplication.features.utils.roundOffDecimal
 
 class CurrencyAdapter :
     ListAdapter<CurrencyDbModel, CurrencyAdapter.MyViewHolder>(DiffCallback) {
@@ -44,8 +45,12 @@ class CurrencyAdapter :
 
         fun bind(item: CurrencyDbModel) {
             binding.currencyFromName.text = item.fromName
+            binding.currencyFromValue.text = item.fromValue.roundOffDecimal().toString()
             binding.currencyToName.text = item.ToName
+            binding.currencyToValue.text = item.ToValue.roundOffDecimal().toString()
+
         }
+
 
     }
 

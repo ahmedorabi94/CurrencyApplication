@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33541666666666664" />
+        <entry key="app/src/main/res/layout/currency_item.xml" value="0.33541666666666664" />
+        <entry key="app/src/main/res/layout/fragment_currency_details.xml" value="0.33541666666666664" />
+        <entry key="app/src/main/res/layout/fragment_rates_list.xml" value="0.2101851851851852" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="liberica-11" project-jdk-type="JavaSDK" />
+</project>
