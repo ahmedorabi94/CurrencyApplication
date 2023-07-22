@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @HiltViewModel
@@ -35,7 +36,7 @@ class RatesListViewModel @Inject constructor(
     var fromValue = ""
     var toValue = ""
 
-    val popularList = ArrayList<RateModel>()
+    var popularList = ArrayList<RateModel>()
     var isGoToNextScreen = false
 
 
@@ -78,6 +79,7 @@ class RatesListViewModel @Inject constructor(
     }
 
     fun getPopularList(map: Map<String, Double>) {
+        popularList = ArrayList()
         map.forEach {
             if (it.key == "CAD" || it.key == "EUR" || it.key == "JPY"
                 || it.key == "USD" || it.key == "GBP" || it.key == "AUD"

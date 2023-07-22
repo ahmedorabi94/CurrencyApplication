@@ -1,7 +1,7 @@
 package com.ahmedorabi.currencyapplication.features
 
 import android.app.Application
-import com.ahmedorabi.currencyapplication.BuildConfig
+import androidx.multidex.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
