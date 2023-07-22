@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ahmedorabi.currencyapplication.core.domain.model.CurrencyDbModel
-import com.ahmedorabi.currencyapplication.core.domain.model.RateModel
 import java.util.*
 
 @Dao

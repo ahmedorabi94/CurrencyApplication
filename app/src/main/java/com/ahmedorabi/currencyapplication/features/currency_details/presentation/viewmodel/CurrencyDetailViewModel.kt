@@ -8,8 +8,6 @@ import com.ahmedorabi.currencyapplication.core.domain.model.CurrencyDbModel
 import com.ahmedorabi.currencyapplication.core.domain.usecases.GetRatesLocalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +29,6 @@ class CurrencyDetailViewModel @Inject constructor(
      private fun getRates(){
         viewModelScope.launch {
             getRatesLocalUseCase.invoke().collect { rates ->
-                //  Timber.e(rates.toString())
                 _ratesResponse.value = rates
             }
 

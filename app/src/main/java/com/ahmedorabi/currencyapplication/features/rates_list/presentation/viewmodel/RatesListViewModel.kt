@@ -35,23 +35,11 @@ class RatesListViewModel @Inject constructor(
     var fromValue = ""
     var toValue = ""
 
-//    var isFromChanged = false
-//    var isToChanged = false
-
     val popularList = ArrayList<RateModel>()
-//    val to1 = RateModel(name = "AED", rateValue = 4.0)
-//    val to2 = RateModel(name = "EGP", rateValue = 20.0)
-//    val to3 = RateModel(name = "EUR", rateValue = 1.0)
-//    val to4 = RateModel(name = "USD", rateValue = 2.0)
     var isGoToNextScreen = false
 
 
     init {
-//        popularList.add(to1)
-//        popularList.add(to2)
-//        popularList.add(to3)
-//        popularList.add(to4)
-
         getRatesResponseFlow()
     }
 

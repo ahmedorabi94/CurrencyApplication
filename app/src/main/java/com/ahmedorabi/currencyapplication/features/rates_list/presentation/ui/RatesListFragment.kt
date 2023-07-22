@@ -1,11 +1,9 @@
 package com.ahmedorabi.currencyapplication.features.rates_list.presentation.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -28,7 +26,7 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.OnTouchListener {
+class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentRatesListBinding? = null
     private val binding get() = _binding!!
@@ -49,14 +47,10 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
         super.onViewCreated(view, savedInstanceState)
         initUI()
         observeViewModel()
-        //  setAdapters()
     }
 
     private fun initUI() {
-
-        binding.ratesSpinnerFrom.setOnTouchListener(this)
         binding.ratesSpinnerFrom.onItemSelectedListener = this
-        binding.ratesSpinnerTo.setOnTouchListener(this)
         binding.ratesSpinnerTo.onItemSelectedListener = this
 
         binding.detailsBtn.setOnClickListener {
@@ -85,14 +79,12 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
             override fun afterTextChanged(s: Editable?) {
 
                 s?.let {
-                    Timber.e("rateEdFrom%s", s.toString())
 
                     if (s.toString().isNotEmpty() && s.toString() != "NaN") {
                         viewModel.fromValue = s.toString()
                         makeConversion()
 
                     } else {
-                        Timber.e("From Here")
                         viewModel.fromValue = ""
                         viewModel.toValue = ""
                         binding.rateEdFrom.setText("0")
@@ -114,9 +106,7 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
             override fun afterTextChanged(s: Editable?) {
 
                 s?.let {
-                    Timber.e("rateEdTo%s", s.toString())
 
-                    Timber.e(s.toString())
                     if (s.toString().isNotEmpty() && s.toString() != "NaN") {
                         viewModel.toValue = s.toString()
                         if (!viewModel.isGoToNextScreen) {
@@ -161,13 +151,14 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
                     Resource.Status.LOADING -> {
                         showLoading()
                     }
+
                     Resource.Status.SUCCESS -> {
                         hideLoading()
-                        Timber.e(userState.data.toString())
                         viewModel.getPopularList(userState.data!!.rates)
                         setAdapters(userState.data)
 
                     }
+
                     Resource.Status.ERROR -> {
                         hideLoading()
                         Toast.makeText(activity, userState.message, Toast.LENGTH_LONG).show()
@@ -182,21 +173,9 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
     private fun setAdapters(ratesResponse: RatesResponse? = null) {
         val rateModelList = ArrayList<RateModel>()
         ratesResponse!!.rates.forEach {
-            // if (it.key == "AED" || it.key == "EUR" || it.key == "EGP"  || it.key == "USD" ){
             rateModelList.add(RateModel(name = it.key, rateValue = it.value))
-
-            // }
         }
-        val to1 = RateModel(name = "AED", rateValue = 4.0)
-        val to2 = RateModel(name = "EGP", rateValue = 20.0)
-        val to3 = RateModel(name = "EUR", rateValue = 1.0)
-        val to4 = RateModel(name = "USD", rateValue = 2.0)
 
-
-        rateModelList.add(to1)
-        rateModelList.add(to2)
-        rateModelList.add(to3)
-        rateModelList.add(to4)
 
         val rateAdapter: ArrayAdapter<RateModel> =
             ArrayAdapter(
@@ -232,7 +211,6 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-        Timber.e(position.toString())
         when (parent?.id) {
             R.id.rates_spinner_from -> {
                 val from = parent.selectedItem as RateModel
@@ -258,9 +236,4 @@ class RatesListFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
 
     override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-        viewModel.isGoToNextScreen = false
-        return false
-    }
 }
