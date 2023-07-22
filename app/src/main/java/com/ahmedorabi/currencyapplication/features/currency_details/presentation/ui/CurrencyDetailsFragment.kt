@@ -1,6 +1,7 @@
 package com.ahmedorabi.currencyapplication.features.currency_details.presentation.ui
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import com.ahmedorabi.currencyapplication.features.currency_details.presentation
 import com.ahmedorabi.currencyapplication.features.currency_details.presentation.viewmodel.CurrencyDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.lang.StringBuilder
 
 
 @AndroidEntryPoint
@@ -60,6 +60,10 @@ class CurrencyDetailsFragment : Fragment() {
                 adapter.submitList(currencies)
             }
         }
+
+        binding.textView.movementMethod = ScrollingMovementMethod()
+
+
     }
 
 
