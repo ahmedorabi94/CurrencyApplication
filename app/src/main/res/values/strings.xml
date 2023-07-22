@@ -4,13 +4,7 @@
     <string name="from">From</string>
     <string name="value">Value</string>
     <string name="to">To</string>
-    <string name="other_popular_currencies">Other Popular Currencies</string>
+    <string name="other_popular_currencies">10 Popular Currencies for 1 Euro</string>
 
-
-    <string-array name="planets_array">
-        <item>EUR</item>
-        <item>USD</item>
-        <item>EGP</item>
-    </string-array>
 
 </resources>

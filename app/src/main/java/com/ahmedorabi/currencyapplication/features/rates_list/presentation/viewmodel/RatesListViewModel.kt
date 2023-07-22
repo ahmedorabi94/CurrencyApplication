@@ -81,7 +81,7 @@ class RatesListViewModel @Inject constructor(
     fun getPopularList(map: Map<String, Double>) {
         popularList = ArrayList()
         map.forEach {
-            if (it.key == "CAD" || it.key == "EUR" || it.key == "JPY"
+            if (it.key == "CAD" || it.key == "CNH" || it.key == "JPY"
                 || it.key == "USD" || it.key == "GBP" || it.key == "AUD"
                 || it.key == "CHF" || it.key == "CNY" || it.key == "HKD" || it.key == "NZD"
             ) {
